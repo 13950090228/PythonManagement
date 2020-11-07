@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.css">
+    <script src="/static/js/jquery.js"></script>
+    <script src="/static/bootstrap/js/bootstrap.js"></script>
+</head>
+<style>
+    .error{
+        color: red;
+    }
+</style>
+<body>
+<h1>注册界面</h1>
+    <div class="container">
+
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+                <form action="" method="post">
+                    {% csrf_token %}
+                    {% for field in form %}
+                        <div class="form-group">
+                            <label for="">{{ field.label }}</label>
+                            {{field}}
+                            <span class="error"></span>
+                        </div>
+                    {% endfor %}
+                </form>
+                <button class="btn btn-primary pull-right" id="reg_btn">注册</button>
+            </div>
+        </div>
+
+    </div>
+</body>
+<script>
+    $("#reg_btn").click(function () {
+        $.ajax({
+            url:"",
+            type:"post",
+            data:{
+                user:$("#id_user").val(),
+                pwd:$("#id_pwd").val(),
+                gender:$("#id_gender").val(),
+                r_pwd:$("#id_r_pwd").val(),
+                email:$("#id_email").val(),
+                csrfmiddlewaretoken:$("[name='csrfmiddlewaretoken']").val()
+            },
+            success:function (response) {
+                if(response.user){
+                    location.href="/login/"
+                }else{
+                    $(".error").html("");
+                    $.each(response.err_msg,function (i,j) {
+                        console.log(i,j)
+                        $("#id_"+i).next().html(j[0]);
+                        // $("#id_"+i).parent().addClass("has-error")
+                    })
+                }
+
+
+            }
+        })
+    })
+</script>
+</html>

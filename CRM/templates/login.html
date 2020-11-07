@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.css">
+    <script src="/static/js/jquery.js"></script>
+    <script src="/static/bootstrap/js/bootstrap.js"></script>
+</head>
+<body>
+<h1>登陆界面</h1>
+    <div class="container">
+
+        <div class="row">
+            {% csrf_token %}
+            <div class="col-md-6 col-md-offset-3">
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="">用户名</label>
+                        <input type="text" class="form-control" id="user">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="">密码</label>
+                        <input type="password" class="form-control" id="pwd">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="">验证码</label>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <input type="text" class="form-control" id="validcode">
+                            </div>
+                            <div class="col-md-2">
+                                <img class="valid_img" width="150" height="35" src="/get_valid_img/" alt="">
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+                <button class="btn btn-primary pull-right" id="loginbtn">登陆</button>
+            </div>
+        </div>
+
+    </div>
+</body>
+<script>
+    $('#loginbtn').click(function () {
+        $.ajax({
+            url:"",
+            type:"post",
+            data:{
+                user:$("#user").val(),
+                pwd:$("#pwd").val(),
+                validcode:$("#validcode").val(),
+                csrfmiddlewaretoken:$("[name='csrfmiddlewaretoken']").val()
+            },
+            success:function (response) {
+
+                 if(response.user){
+                         // 登录成功
+                     location.href="/";
+                 }
+                 else{
+                         // 登录失败
+                     $(".error").html(response.err_msg).css("color","red")
+                 }
+            }
+        })
+    })
+
+    $(".valid_img").click(function () {
+        this.src+="?";
+
+    })
+</script>
+</html>
